@@ -2,9 +2,6 @@
 
 Un système de monitoring de capteurs basé sur ESP32 avec une interface web interactive permettant de surveiller la température et la luminosité en temps réel.
 
-![Dashboard Interface](/api/placeholder/800/400)
-*Interface du dashboard web*
-
 ## 📋 Table des matières
 
 - [Fonctionnalités](#fonctionnalités)
@@ -132,7 +129,7 @@ curl -X POST http://[ESP32_IP]/api/led \
   -d '{"state":"on"}'
 ```
 
-## 💻 Interface utilisateur
+## 💻 Interface 
 
 ![Interface sections](images/Interface.png)
 *Sections principales de l'interface*
