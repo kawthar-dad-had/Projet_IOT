@@ -95,6 +95,9 @@ esp32-sensor-monitoring/
 │   ├── display.h
 │   └── display.cpp
 ├── index.html
+├── images/
+|   ├── Interface.png
+|   ├── iot.jpeg
 └── README.md
 ```
 
@@ -171,15 +174,5 @@ L'interface web propose quatre sections principales :
 | On | Seuil dépassé |
 | Clignotant | Erreur système |
 
-## 📝 Contributing
+## 📝 
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
-## 📄 License
-
-Ce projet est sous licence MIT - voir le fichier [LICENSE.md](LICENSE.md) pour plus de détails.
