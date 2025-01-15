@@ -41,7 +41,7 @@ Un système de monitoring de capteurs basé sur ESP32 avec une interface web int
 
 ### Schéma de connexion
 
-![Schéma de connexion](images/iot.jpeg)
+![Schéma de connexion](images/iot.jpg)
 *Schéma de câblage des composants*
 
 ### Brochage
@@ -94,7 +94,7 @@ esp32-sensor-monitoring/
 ├── index.html
 ├── images/
 |   ├── Interface.png
-|   ├── iot.jpeg
+|   ├── iot.jpg
 └── README.md
 ```
 
