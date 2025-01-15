@@ -59,10 +59,11 @@ void setupAPI() {
             request->send(404);
         }
     });
+
     // GET /api/sensors - List all sensors
     server.on("/api/sensors", HTTP_GET, [](AsyncWebServerRequest *request) {
         DynamicJsonDocument doc(1024);
-        JsonArray array = doc.createNestedArray(); // Correction ici
+        JsonArray array = doc.createNestedArray();
         
         for(int i = 0; i < sensorCount; i++) {
             sensors[i]->toJson(doc);
@@ -76,6 +77,7 @@ void setupAPI() {
     // GET /api/sensors/{id} - Get specific sensor
     server.on("^\\/api\\/sensors\\/([a-z0-9]+)$", HTTP_GET, [](AsyncWebServerRequest *request) {
         String id = request->pathArg(0);
+        Serial.println("Sensor ID requested: " + id); // Ajoutez ceci pour déboguer
         
         for(int i = 0; i < sensorCount; i++) {
             if(sensors[i]->getId() == id) {
@@ -84,6 +86,7 @@ void setupAPI() {
                 
                 String response;
                 serializeJson(doc, response);
+                Serial.println("Sensor data: " + response); // Ajoutez ceci pour voir les données
                 request->send(200, "application/json", response);
                 return;
             }
@@ -91,7 +94,7 @@ void setupAPI() {
         
         request->send(404, "application/json", "{\"error\": \"Sensor not found\"}");
     });
-    
+
     // POST /api/led - Control LED
     server.on("/api/led", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, 
         [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
@@ -120,7 +123,7 @@ void setupAPI() {
             request->send(400, "application/json", "{\"error\": \"Missing state parameter\"}");
         }
     });
-    
+
     // POST /api/threshold - Set threshold
     server.on("/api/threshold", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL,
         [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
@@ -142,6 +145,50 @@ void setupAPI() {
             request->send(400, "application/json", "{\"error\": \"Missing required parameters\"}");
         }
     });
+    // POST /api/display/temp-message - Display a message based on temperature
+    server.on("/api/display/temp-message", HTTP_POST, [](AsyncWebServerRequest *request) {
+        float temperature = tempSensor.read();
+        String message;
+
+        if (temperature < 10) {
+            message = "Il fait froid !";
+        } else if (temperature >= 10 && temperature <= 25) {
+            message = "Il fait beau !";
+        } else {
+            message = "Il fait chaud !";
+        }
+
+        display.clear();
+        display.showText(message);
+
+        DynamicJsonDocument response(256);
+        response["temperature"] = temperature;
+        response["message"] = message;
+
+        String jsonResponse;
+        serializeJson(response, jsonResponse);
+        request->send(200, "application/json", jsonResponse);
+    });
+
+
+    // POST /api/display - Display text on TTGO
+    server.on("/api/display", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL,
+        [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+            DynamicJsonDocument doc(256);
+            deserializeJson(doc, (const char*)data);
+            
+            if (doc.containsKey("text")) {
+                String text = doc["text"].as<String>();
+                
+                // Affiche le texte sur le TTGO
+                display.clear();
+                display.showText(text);
+                
+                request->send(200, "application/json", "{\"status\": \"Text displayed\"}");
+            } else {
+                request->send(400, "application/json", "{\"error\": \"Missing text parameter\"}");
+            }
+        });
 }
 
 void checkThreshold() {

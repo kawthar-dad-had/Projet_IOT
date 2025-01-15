@@ -11,9 +11,12 @@ private:
 public:
     Display();
     void init();
+    void clear(); // Ajout de la méthode clear
     void showSensorValues(float temp, float light);
     void showStatus(const String& status);
     void showError(const String& error);
+    void showText(const String& text);
 };
 
 #endif
+

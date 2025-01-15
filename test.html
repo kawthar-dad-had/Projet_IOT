@@ -299,13 +299,13 @@
           <div class="button-group">
             <button class="primary" onclick="getAllSensors()">
               <i class="fas fa-sync-alt"></i> Tous les capteurs
-            </button>
+            <!-- </button>
             <button class="primary" onclick="getSensor('temp1')">
               <i class="fas fa-temperature-high"></i> Température
             </button>
             <button class="primary" onclick="getSensor('light1')">
               <i class="fas fa-sun"></i> Luminosité
-            </button>
+            </button> -->
           </div>
           <div id="sensorOutput" class="output"></div>
         </div>
@@ -361,6 +361,34 @@
           </div>
           <div id="thresholdOutput" class="output"></div>
         </div>
+        <div class="card">
+          <h3>Afficher un texte</h3>
+          <div class="input-group">
+            <label for="displayText">Texte à afficher</label>
+            <input
+              type="text"
+              id="displayText"
+              placeholder="Entrez votre texte ici"
+            />
+          </div>
+          <div class="button-group">
+            <button class="primary" onclick="sendTextToDisplay()">
+              <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
+          </div>
+          <div id="displayOutput" class="output"></div>
+        </div>
+        <div class="card">
+          <h3>Afficher un message selon la température</h3>
+          <div class="button-group">
+            <button class="primary" onclick="displayTemperatureMessage()">
+              <i class="fas fa-temperature-high"></i> Afficher le message
+            </button>
+          </div>
+          <div id="tempMessageOutput" class="output"></div>
+        </div>
+        
+        
       </div>
     </div>
 
@@ -444,6 +472,50 @@
           ).textContent = `Erreur: ${error.message}`;
         }
       }
+      async function sendTextToDisplay() {
+        try {
+          const text = document.getElementById("displayText").value;
+
+          const response = await fetch(`${getBaseUrl()}/api/display`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+          });
+          const data = await response.json();
+          document.getElementById("displayOutput").textContent = JSON.stringify(
+            data,
+            null,
+            2
+          );
+        } catch (error) {
+          document.getElementById(
+            "displayOutput"
+          ).textContent = `Erreur: ${error.message}`;
+        }
+      }
+      async function displayTemperatureMessage() {
+        try {
+          console.log("Tentative de connexion à", `${getBaseUrl()}/api/display/temp-message`);
+          const response = await fetch(`${getBaseUrl()}/api/display/temp-message`, {
+            method: "POST",
+          });
+          console.log("Réponse brute :", response);
+          const data = await response.json();
+          console.log("Données reçues :", data);
+
+          document.getElementById("tempMessageOutput").textContent = JSON.stringify(
+            data,
+            null,
+            2
+          );
+        } catch (error) {
+          console.error("Erreur :", error);
+          document.getElementById(
+            "tempMessageOutput"
+          ).textContent = `Erreur: ${error.message}`;
+        }
+      }
+
 
       // Actualisation automatique des capteurs toutes les 2 secondes
       setInterval(getAllSensors, 2000);

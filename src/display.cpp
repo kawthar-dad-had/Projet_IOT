@@ -13,6 +13,10 @@ void Display::init() {
     tft.println("Sensor Monitor");
 }
 
+void Display::clear() {
+    tft.fillScreen(TFT_BLACK); // Efface tout l'écran
+}
+
 void Display::showSensorValues(float temp, float light) {
     tft.fillRect(0, 30, 240, 60, TFT_BLACK);
     tft.setCursor(0, 30);
@@ -34,3 +38,12 @@ void Display::showError(const String& error) {
     tft.setTextColor(TFT_RED);
     tft.println(error);
 }
+
+void Display::showText(const String &text) {
+    clear(); // Efface l'écran
+    tft.setCursor(0, 0); // Définit la position initiale
+    tft.setTextColor(TFT_WHITE); // Définit la couleur du texte
+    tft.setTextSize(2); // Définit la taille du texte
+    tft.println(text); // Affiche le texte
+}
+
