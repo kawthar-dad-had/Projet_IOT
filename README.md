@@ -132,6 +132,8 @@ curl -X POST http://[ESP32_IP]/api/led \
 ## 💻 Interface 
 
 ![Interface sections](images/Interface.png)
+
+
 *Sections principales de l'interface*
 
 L'interface web propose quatre sections principales :
